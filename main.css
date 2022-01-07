@@ -1,0 +1,52 @@
+body{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+div#admin{
+    background-color: #060606;
+    max-width: 70px;
+    min-width: 70px;
+    width: 70px;
+}
+
+div#aluna{
+    color: cornsilk;
+    font-family: Roboto Mono, Monospace;
+    font-size: 15px;
+    width: 100%;
+}
+
+.code{
+    background-color: darkorchid;
+}
+
+div#frame{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+div#preview{
+    background-color: #0b0b0b;
+    max-width: 448px;
+    min-width: 448px;
+    width: 448px;
+}
+
+div#selection{
+    background-color: #0b0b0b;
+    max-width: 192px;
+    min-width: 192px;
+    width: 192px;
+}
+
+html{
+    height: 100%;
+    width: 100%;
+}
+

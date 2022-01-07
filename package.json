@@ -1,0 +1,19 @@
+{
+    "name": "aluna",
+    "version": "0.0.1",
+    "description": "HTML-, CSS- & Javascript-Editor",
+    "main": "index.js",
+    "scripts": {},
+    "keywords": [
+        "javascript",
+        "html",
+        "css",
+        "editor",
+        "web",
+        "online"
+    ],
+    "author": "Leo Battaglia",
+    "license": "ISC",
+    "devDependencies": {},
+    "dependencies": {}
+}
