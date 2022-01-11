@@ -1,3 +1,8 @@
+#aluna{
+    font-family: Roboto Mono, Monospace;
+    font-size: 15px;
+}
+
 body{
     display: flex;
     flex-direction: row;
@@ -12,17 +17,6 @@ div#admin{
     max-width: 70px;
     min-width: 70px;
     width: 70px;
-}
-
-div#aluna{
-    color: cornsilk;
-    font-family: Roboto Mono, Monospace;
-    font-size: 15px;
-    width: 100%;
-}
-
-.code{
-    background-color: darkorchid;
 }
 
 div#frame{
