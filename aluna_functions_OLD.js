@@ -49,10 +49,10 @@ export function getKeyCodePreventDefault(keyCode){
     return false;
 }
 
-export function getLeft(editor, row, coords, charWidth, padding){
+export function getLeft(editor, row, coords, charWidth){
     let left = coords.x + editor.offsetLeft - (coords.x % charWidth);
     if(left > (row.offsetLeft + row.offsetWidth)){
-        left = row.offsetLeft + row.offsetWidth - padding;
+        left = row.offsetLeft + row.offsetWidth - config.padding;
     }
     return left;
 }

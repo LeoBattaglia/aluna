@@ -1,0 +1,15 @@
+export let bgEditor = "#1b1b1b";
+export let bgLineActive = "#242424";
+export let bgNumbers = "#181818";
+export let bgScrollbar = "#151515";
+export let bgScrollbarObject = "#303030";
+export let bgScrollbarOverflow = "#101010";
+export let bgVerticalLine = "#2b2b2b";
+export let fgEditor = "#eeeeee";
+export let fgNumbers = "#555555";
+export let fgNumbersActive = "#888888";
+export let lineHeightPlus = 2;
+export let lineVerticalWidth = 2;
+export let numbersLength = 4;
+export let padding = 5;
+export let scrollBarWidth = 12;
