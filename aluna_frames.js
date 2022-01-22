@@ -1,10 +1,12 @@
 //Imports
 import * as config from "./aluna_config.js";
+import * as func from "./aluna_functions.js";
 
 //Class
 export class Frames{
     //Declarations
     charAtts;
+    editor;
     frmEditor;
     frmHorizontal;
     frmMain;
@@ -22,12 +24,6 @@ export class Frames{
     }
 
     //Methods
-    createDiv(id){
-        let div = document.createElement("div");
-        div.setAttribute("id", id);
-        return div;
-    }
-
     init(){
         this.initFrameMain();
         this.initFrameLineNumbers();
@@ -38,23 +34,43 @@ export class Frames{
         this.initFrameScrollbarHorizontal();
         this.initFrameScrollbarSpacer();
         this.initFrameEditor();
+        this.initEditor();
         this.initFrameScrollbarVertical();
     }
 
-    initFrameEditor(){
-        let div = this.createDiv("alunaFrameEditor");
-        div.style.backgroundColor = config.bgEditor;
-        div.style.color = config.fgEditor;
+    initEditor(){
+        let div = func.createDiv("alunaEditor");
+        //div.style.backgroundColor = config.bgEditor;
+        //div.style.color = config.fgEditor;
         div.style.display = "flex";
         div.style.flexDirection = "column";
+        div.style.height = "fit-content";
+        div.style.minHeight = "100%";
+        div.style.minWidth = "100%";
+        //div.style.overflow = "hidden";
+        div.style.paddingTop = config.padding + "px";
+        div.style.width = "fit-content";
+        this.editor = div;
+        this.frmEditor.appendChild(div);
+    }
+
+    initFrameEditor(){
+        let div = func.createDiv("alunaFrameEditor");
+        div.style.backgroundColor = config.bgEditor;
+        div.style.color = config.fgEditor;
+        //div.style.display = "flex";
+        //div.style.flexDirection = "column";
         div.style.height = "100%";
+        div.style.overflow = "hidden";
+        //div.style.paddingTop = config.padding + "px";
+        div.style.position = "relative";
         div.style.width = "100%";
         this.frmEditor = div;
         this.frmHorizontal.appendChild(div);
     }
 
     initFrameHorizontal(){
-        let div = this.createDiv("alunaFrameHorizontal");
+        let div = func.createDiv("alunaFrameHorizontal");
         div.style.display = "flex";
         div.style.flexDirection = "row";
         div.style.height = "100%";
@@ -64,10 +80,14 @@ export class Frames{
     }
 
     initFrameLineNumbers(){
-        let div = this.createDiv("alunaFrameLineNumbers");
+        let div = func.createDiv("alunaFrameLineNumbers");
         div.style.backgroundColor = config.bgLineNumbers;
-        let width = (2 * config.padding) + (config.lineNumbersChars * this.charAtts.width);
-        div = this.setAllWidths(div, width);
+        div.style.color = config.fgLineNumbers;
+        div.style.display = "flex";
+        div.style.flexDirection = "column";
+        div.style.paddingTop = config.padding + "px";
+        let line = func.createLineNumber(1);
+        div.appendChild(line);
         this.frmLineNumbers = div;
         this.frmMain.appendChild(div);
     }
@@ -77,12 +97,13 @@ export class Frames{
         div.style.display = "flex";
         div.style.flexDirection = "row";
         div.style.fontFamily = "Aluna";
+        div.style.fontSize = config.fontSize + "px";
         div.style.width = "100%";
         this.frmMain = div;
     }
 
     initFrameScrollbarHorizontal(){
-        let div = this.createDiv("alunaFrameScrollbarHorizontal");
+        let div = func.createDiv("alunaFrameScrollbarHorizontal");
         div.style.height = "100%";
         div.style.width = "100%";
         this.frmScrollbarHorizontal = div;
@@ -90,36 +111,36 @@ export class Frames{
     }
 
     initFrameScrollbarHorizontalOut(){
-        let div = this.createDiv("alunaFrameScrollbarHorizontalOut");
+        let div = func.createDiv("alunaFrameScrollbarHorizontalOut");
         div.style.backgroundColor = config.bgFrameScrollbar;
         div.style.display = "flex";
         div.style.flexDirection = "row";
-        div = this.setAllHeights(div, config.scrollbarWidth);
+        div = func.setAllHeights(div, config.scrollbarSize);
         div.style.width = "100%";
         this.frmScrollbarHorizontalOut = div;
         this.frmVertical.appendChild(div);
     }
 
     initFrameScrollbarSpacer(){
-        let div = this.createDiv("alunaScrollbarSpacer");
+        let div = func.createDiv("alunaScrollbarSpacer");
         div.style.backgroundColor = config.bgScrollbarSpacer;
         div.style.height = "100%";
-        div = this.setAllWidths(div, config.scrollbarWidth);
+        div = func.setAllWidths(div, config.scrollbarSize);
         this.frmScrollbarHorizontal = div;
         this.frmScrollbarHorizontalOut.appendChild(div);
     }
 
     initFrameScrollbarVertical(){
-        let div = this.createDiv("alunaFrameScrollbarVertical");
+        let div = func.createDiv("alunaFrameScrollbarVertical");
         div.style.backgroundColor = config.bgFrameScrollbar;
         div.style.height = "100%";
-        div = this.setAllWidths(div, config.scrollbarWidth);
+        div = func.setAllWidths(div, config.scrollbarSize);
         this.frmScrollbarVertical = div;
         this.frmHorizontal.appendChild(div);
     }
 
     initFrameVertical(){
-        let div = this.createDiv("alunaFrameVertical");
+        let div = func.createDiv("alunaFrameVertical");
         div.style.display = "flex";
         div.style.flexDirection = "column";
         div.style.width = "100%";
@@ -128,24 +149,24 @@ export class Frames{
     }
 
     initHorizontalSpacer(){
-        let div = this.createDiv("alunaVerticalSpacer");
+        let div = func.createDiv("alunaVerticalSpacer");
         div.style.backgroundColor = config.bgHorizontalSpacer;
-        div = this.setAllWidths(div, config.horizontalSpacerWidth);
+        div = func.setAllWidths(div, config.horizontalSpacerWidth);
         this.verticalSpacer = div;
         this.frmMain.appendChild(div);
     }
 
-    setAllHeights(element, height){
-        element.style.height = height + "px";
-        element.style.maxHeight = height + "px";
-        element.style.minHeight = height + "px";
-        return element;
+    resetData(charAtts){
+        this.charAtts = charAtts;
+        let width = (2 * config.padding) + (config.lineNumbersChars * this.charAtts.width);
+        this.frmLineNumbers = func.setAllWidths(this.frmLineNumbers, width);
+        this.frmLineNumbers.style.lineHeight = this.charAtts.lineHeight + "px";
+        this.frmEditor.style.lineHeight = this.charAtts.lineHeight + "px";
+        this.resetSizes();
     }
 
-    setAllWidths(element, width){
-        element.style.maxWidth = width + "px";
-        element.style.minWidth = width + "px";
-        element.style.width = width + "px";
-        return element;
+    resetSizes(){
+        this.frmEditor = func.setAllHeights(this.frmEditor, this.frmHorizontal.offsetHeight);
+        this.frmEditor = func.setAllWidths(this.frmEditor, this.frmHorizontal.offsetWidth - config.scrollbarSize);
     }
 }

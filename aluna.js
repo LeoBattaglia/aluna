@@ -1,29 +1,33 @@
 //Imports
-import * as caretObject from "./aluna_caret.js";
+import * as EditorObject from "./aluna_editor.js";
 import * as framesObject from "./aluna_frames.js";
 import * as func from "./aluna_functions.js";
 
 //Class
 class Editor{
     //Declarations
-    caret;
     charAtts;
+    editor;
     frames;
 
     //Constructor
     constructor(){
-        func.importFont();
+        func.initCSS();
         this.charAtts = func.getCharAtts();
         this.frames = new framesObject.Frames(this.charAtts);
-        this.caret = new caretObject.Caret(this.charAtts, this.frames.frmEditor);
+        func.initListeners(this.frames);
     }
 
     //Methods
-
-    //TODO: All
-
+    onLoad(){
+        this.charAtts = func.getCharAtts();
+        this.frames.resetData(this.charAtts);
+        this.editor = new EditorObject.Editor(this.frames);
+    }
 }
 
 //Start
-let e;
-e = new Editor();
+let e = new Editor();
+window.onload = () => {
+    e.onLoad();
+};
