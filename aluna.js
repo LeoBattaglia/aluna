@@ -1,14 +1,24 @@
 //Imports
-import * as EditorObject from "./aluna_editor.js";
-import * as framesObject from "./aluna_frames.js";
-import * as func from "./aluna_functions.js";
+import * as caretObject from "./scripts/aluna_caret.js";
+import * as editorObject from "./scripts/aluna_editor.js";
+import * as framesObject from "./scripts/aluna_frames.js";
+import * as func from "./scripts/aluna_functions.js";
+import * as inputObject from "./scripts/aluna_input.js";
+import * as mouseObject from "./scripts/aluna_mouse.js";
+import * as scrollObject from "./scripts/aluna_scrollbars.js";
+import * as selectionObject from "./scripts/aluna_selection.js";
 
 //Class
 class Editor{
     //Declarations
+    caret;
     charAtts;
     editor;
     frames;
+    input;
+    mouse;
+    scroll;
+    selection;
 
     //Constructor
     constructor(){
@@ -22,7 +32,12 @@ class Editor{
     onLoad(){
         this.charAtts = func.getCharAtts();
         this.frames.resetData(this.charAtts);
-        this.editor = new EditorObject.Editor(this.frames);
+        this.editor = new editorObject.Editor(this.frames, this.charAtts);
+        this.input = new inputObject.Input(this.editor);
+        this.caret = new caretObject.Caret(this.editor, this.input);
+        this.selection = new selectionObject.Selection(this.editor);
+        this.mouse = new mouseObject.Mouse(this.editor, this.caret, this.selection);
+        this.scroll = new scrollObject.ScrollBars(this.editor);
     }
 }
 
