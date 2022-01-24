@@ -4,12 +4,12 @@ export let bgEditor = "#1b1b1b";
 export let bgFrameScrollbar = "#151515";
 export let bgLineNumbers = "#181818";
 export let bgHorizontalSpacer = "#2b2b2b";
-export let bgRowActive = "#242424";
+export let bgRowActive = "#272727";
 export let bgScrollbarSpacer = "#0f0f0f";
 export let bgSelection = "#214283";
 
 //Foreground-Colors
-export let fgEditor = "#eeeeee";
+export let fgEditor = "#c4d0dd";
 export let fgLineNumbers = "#555555";
 
 //Sizes

@@ -1,43 +1,41 @@
 //Import
 import * as config from "./aluna_config.js";
 import * as func from "./aluna_functions.js";
+import * as main from "../aluna.js";
 
 //Classes
 export class Editor{
-    //Declarations
-    charAtts;
-    frames;
-
     //Constructor
-    constructor(frames, charAtts){
-        this.frames = frames;
-        this.charAtts = charAtts;
-        this.addRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        this.addRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        this.addRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-1");
-    }
+    constructor(){}
 
     //Methods
     addRow(content){
         let line = func.createLine(content);
-        this.frames.editor.appendChild(line);
+        main.getFrames().editor.appendChild(line);
         this.resetRowNumbers();
     }
 
     getEditor(){
-        return this.frames.editor;
+        return main.getFrames().editor;
     }
 
     getFrame(){
-        return this.frames.frmEditor;
+        return main.getFrames().frmEditor;
     }
 
     getPositionStartLeft(){
-        return this.frames.editor.offsetLeft + config.padding;
+        return main.getFrames().editor.offsetLeft + config.padding;
     }
 
     getPositionStartTop(){
-        return this.frames.editor.offsetTop + config.padding + 5
+        return main.getFrames().editor.offsetTop + config.padding + 5
+    }
+
+    removeRowNumbers(){
+        let elements = document.getElementsByClassName("alunaLineNumber");
+        while(elements[0]){
+            elements[0].parentNode.removeChild(elements[0]);
+        }
     }
 
     removeSelectedContent(){
@@ -47,9 +45,10 @@ export class Editor{
     }
 
     resetRowNumbers(){
-
-        //TODO: All
-
+        this.removeRowNumbers();
+        for(let i = 0; i < main.getFrames().editor.childElementCount; i++){
+            main.getFrames().frmLineNumbers.appendChild(func.createLineNumber(i + 1));
+        }
     }
 
     setActiveRow(rowNr){
@@ -57,6 +56,6 @@ export class Editor{
         if(document.getElementById("aluna_row_active") !== null){
             document.getElementById("aluna_row_active").remove();
         }
-        this.frames.frmEditor.appendChild(func.createActiveRow(this.frames.editor, rowNr, this.charAtts));
+        main.getFrames().frmEditor.appendChild(func.createActiveRow(main.getFrames().editor, rowNr, main.getCharAtts()));
     }
 }

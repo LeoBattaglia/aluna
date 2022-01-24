@@ -1,12 +1,7 @@
 //Class
 export class Input{
-    //Declarations
-    editor
-
     //Constructor
-    constructor(editor){
-        this.editor = editor;
-    }
+    constructor(){}
 
     //Methods
     keyDown(e){

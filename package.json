@@ -1,8 +1,8 @@
 {
     "name": "aluna",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "HTML-, CSS- & Javascript-Editor",
-    "main": "index.js",
+    "main": "aluna.js",
     "scripts": {},
     "keywords": [
         "javascript",

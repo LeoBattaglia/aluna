@@ -32,12 +32,17 @@ class Editor{
     onLoad(){
         this.charAtts = func.getCharAtts();
         this.frames.resetData(this.charAtts);
-        this.editor = new editorObject.Editor(this.frames, this.charAtts);
-        this.input = new inputObject.Input(this.editor);
-        this.caret = new caretObject.Caret(this.editor, this.input);
-        this.selection = new selectionObject.Selection(this.editor);
-        this.mouse = new mouseObject.Mouse(this.editor, this.caret, this.selection);
-        this.scroll = new scrollObject.ScrollBars(this.editor);
+        this.editor = new editorObject.Editor();
+        this.input = new inputObject.Input();
+        this.caret = new caretObject.Caret();
+        this.selection = new selectionObject.Selection();
+        this.mouse = new mouseObject.Mouse();
+        this.scroll = new scrollObject.ScrollBars();
+
+
+        this.editor.addRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        this.editor.addRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        this.editor.addRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ-1");
     }
 }
 
@@ -46,3 +51,36 @@ let e = new Editor();
 window.onload = () => {
     e.onLoad();
 };
+
+//Functions
+export function getCaret(){
+    return e.caret;
+}
+
+export function getCharAtts(){
+    return e.charAtts;
+}
+
+export function getEditor(){
+    return e.editor;
+}
+
+export function getFrames(){
+    return e.frames;
+}
+
+export function getInput(){
+    return e.input;
+}
+
+export function getMouse(){
+    return e.mouse;
+}
+
+export function getScroll(){
+    return e.scroll;
+}
+
+export function getSelection(){
+    return e.selection;
+}

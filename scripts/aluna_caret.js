@@ -1,19 +1,15 @@
 //Imports
-import * as config from "./aluna_config.js";
 import {Position} from "./aluna_classes.js";
+import * as config from "./aluna_config.js";
+import * as main from "../aluna.js";
 
 //Classes
 export class Caret{
     //Declarations
-    caret;
     caretPos;
-    editor;
-    input;
 
     //Constructor
     constructor(editor, input){
-        this.editor = editor;
-        this.input = input;
         this.init();
     }
 
@@ -33,20 +29,20 @@ export class Caret{
         this.caret.style.border = "0px none #ffffff";
         this.caret.style.caretColor = "transparent";
         this.caret.style.color = "transparent";
-        this.caret.style.height = this.editor.charAtts.fontSize + "px";
+        this.caret.style.height = main.getCharAtts().fontSize + "px";
         this.caret.style.margin = "0";
         this.caret.style.outline = "none";
         this.caret.style.padding = "0";
-        this.caret.style.left = this.editor.getPositionStartLeft() + "px";
+        this.caret.style.left = main.getEditor().getPositionStartLeft() + "px";
         this.caret.style.overflow = "hidden";
         this.caret.style.position = "absolute";
         this.caret.style.resize = "none";
-        this.caret.style.top = this.editor.getPositionStartTop() + "px";
+        this.caret.style.top = main.getEditor().getPositionStartTop() + "px";
         this.caret.style.width = config.caretWidth + "px";
         this.caret.style.zIndex = "3";
-        this.editor.getFrame().appendChild(this.caret);
+        main.getEditor().getFrame().appendChild(this.caret);
         this.caret.focus();
-        this.editor.setActiveRow(0);
+        main.getEditor().setActiveRow(0);
     }
 
     initCSS(){
@@ -58,30 +54,18 @@ export class Caret{
 
     initListeners(){
         this.caret.addEventListener("keydown", (e) => {
-            this.input.keyDown(e)
+            main.getInput().keyDown(e)
         });
         this.caret.addEventListener("keyup", (e) => {
-            this.input.keyUp(e)
+            main.getInput().keyUp(e)
         });
     }
 
-    moveToPosition(pos, rowNr){
-        /*charPos = this.getCharPosition(this.mousePos);
-        if(charPos.y > this.editor.getEditor().childElementCount - 1){
-            charPos.y = this.editor.getEditor().childElementCount - 1;
-        }
-        let top = config.padding + (charPos.y * this.editor.charAtts.lineHeight) + 5;
-        if(charPos.x > this.editor.getEditor().children[charPos.y].textContent.length){
-            charPos.x = this.editor.getEditor().children[charPos.y].textContent.length;
-        }
-        let left = config.padding + (charPos.x * this.editor.charAtts.width);*/
-        //this.caret.style.left = left + "px";
-        //this.caret.style.top = top + "px";
-        console.log("CCC: " + pos.x + "/" + pos.y);
+    moveToPosition(pos, activeRowNr){
         this.caret.style.left = pos.x + "px";
         this.caret.style.top = pos.y + "px";
         this.caret.focus();
         this.caretPos = pos;
-        this.editor.setActiveRow(rowNr);
+        main.getEditor().setActiveRow(activeRowNr);
     }
 }
