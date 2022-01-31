@@ -1,6 +1,6 @@
 {
     "name": "aluna",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "HTML-, CSS- & Javascript-Editor",
     "main": "aluna.js",
     "scripts": {},

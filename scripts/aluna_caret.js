@@ -9,7 +9,7 @@ export class Caret{
     caretPos;
 
     //Constructor
-    constructor(editor, input){
+    constructor(){
         this.init();
     }
 
@@ -54,10 +54,10 @@ export class Caret{
 
     initListeners(){
         this.caret.addEventListener("keydown", (e) => {
-            main.getInput().keyDown(e)
+            main.getInput().keyDown(e);
         });
         this.caret.addEventListener("keyup", (e) => {
-            main.getInput().keyUp(e)
+            main.getInput().keyUp(e);
         });
     }
 

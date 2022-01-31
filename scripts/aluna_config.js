@@ -5,6 +5,7 @@ export let bgFrameScrollbar = "#151515";
 export let bgLineNumbers = "#181818";
 export let bgHorizontalSpacer = "#2b2b2b";
 export let bgRowActive = "#272727";
+export let bgScrollbar = "#353535";
 export let bgScrollbarSpacer = "#0f0f0f";
 export let bgSelection = "#214283";
 

@@ -15,6 +15,7 @@ export class Frames{
     frmScrollbarHorizontalOut;
     frmScrollbarVertical;
     frmVertical;
+    scrollbarSpacer;
     verticalSpacer;
 
     //Constructor
@@ -42,13 +43,17 @@ export class Frames{
         let div = func.createDiv("alunaEditor");
         //div.style.backgroundColor = config.bgEditor;
         //div.style.color = config.fgEditor;
+        div.style.cursor = "text";
         div.style.display = "flex";
         div.style.flexDirection = "column";
         div.style.height = "fit-content";
-        div.style.minHeight = "100%";
+        //div.style.minHeight = "100%";
+        div.style.minHeight = "calc(100% - " + config.padding + "px)";
         div.style.minWidth = "100%";
         //div.style.overflow = "hidden";
         div.style.paddingTop = config.padding + "px";
+        div.style.position = "relative";
+        div.style.userSelect = "none";
         div.style.width = "fit-content";
         this.editor = div;
         this.frmEditor.appendChild(div);
@@ -61,6 +66,7 @@ export class Frames{
         //div.style.display = "flex";
         //div.style.flexDirection = "column";
         div.style.height = "100%";
+        div.style.minHeight = "100%";
         div.style.overflow = "hidden";
         //div.style.paddingTop = config.padding + "px";
         div.style.position = "relative";
@@ -86,6 +92,7 @@ export class Frames{
         div.style.display = "flex";
         div.style.flexDirection = "column";
         div.style.paddingTop = config.padding + "px";
+        div.style.userSelect = "none";
         let line = func.createLineNumber(1);
         div.appendChild(line);
         this.frmLineNumbers = div;
@@ -126,7 +133,7 @@ export class Frames{
         div.style.backgroundColor = config.bgScrollbarSpacer;
         div.style.height = "100%";
         div = func.setAllWidths(div, config.scrollbarSize);
-        this.frmScrollbarHorizontal = div;
+        this.scrollbarSpacer = div;
         this.frmScrollbarHorizontalOut.appendChild(div);
     }
 
@@ -166,7 +173,9 @@ export class Frames{
     }
 
     resetSizes(){
-        this.frmEditor = func.setAllHeights(this.frmEditor, this.frmHorizontal.offsetHeight);
-        this.frmEditor = func.setAllWidths(this.frmEditor, this.frmHorizontal.offsetWidth - config.scrollbarSize);
+        this.frmEditor.style.height = this.frmHorizontal.offsetHeight + "px";
+        this.frmEditor.style.maxHeight = this.frmHorizontal.offsetHeight + "px";
+        this.frmEditor.style.width = (this.frmHorizontal.offsetWidth - config.scrollbarSize) + "px";
+        this.frmEditor.style.maxWidth = (this.frmHorizontal.offsetWidth - config.scrollbarSize) + "px";
     }
 }

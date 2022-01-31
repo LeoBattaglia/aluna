@@ -9,6 +9,7 @@ export class Mouse{
     //Declarations
     mousePosDown;
     mousePosUp;
+    pressed = false;
 
     //Constructor
     constructor(){
@@ -20,20 +21,24 @@ export class Mouse{
         if(e.button === 0){
             this.mousePosDown = this.getMousePosition(e);
             main.getSelection().removeSelection();
+            this.pressed = true;
         }
     }
 
     clickUp(e){
         if(e.button === 0){
             this.mousePosUp = this.getMousePosition(e);
-            //console.log("CLICK: " + charPos.x + "/" + charPos.y + " || " + this.mousePosDown.x + "/" + this.mousePosDown.y);
-            if(this.isSelection()){
-                main.getSelection().setSelection(this.getCharPosition(this.mousePosDown), this.getCharPosition(this.mousePosUp));
+            let pos;
+            if(main.getSelection().isSelection(this.mousePosDown, this.mousePosUp)){
+                let positions = func.sortPos(this.mousePosDown, this.mousePosUp);
+                pos = this.getCharPosition(positions.small, true, true);
+            }else{
+                pos = this.getCharPosition(this.mousePosUp, true, true);
             }
-            let pos = this.getCharPosition(this.mousePosUp, true, true);
             let left = config.padding + (pos.x * main.getCharAtts().width);
             let top = config.padding + (pos.y * main.getCharAtts().lineHeight) + 5;
             main.getCaret().moveToPosition(new Position(left, top), pos.y);
+            this.pressed = false;
         }
     }
 
@@ -44,8 +49,8 @@ export class Mouse{
         }else{
             charPosY = Math.floor((mousePosition.y - config.padding) / main.getCharAtts().lineHeight);
         }
-        if(correctY && charPosY > main.getEditor().getEditor().childElementCount - 1){
-            charPosY = main.getEditor().getEditor().childElementCount - 1;
+        if(correctY && charPosY > main.getEditor().getRowCount() - 1){
+            charPosY = main.getEditor().getRowCount() - 1;
         }
         let charPosX;
         if(mousePosition.x <= config.padding){
@@ -53,14 +58,14 @@ export class Mouse{
         }else{
             charPosX = Math.round((mousePosition.x - config.padding) / main.getCharAtts().width);
         }
-        if(correctX && charPosX > main.getEditor().getEditor().children[charPosY].textContent.length){
-            charPosX = main.getEditor().getEditor().children[charPosY].textContent.length;
+        if(correctX && charPosX > main.getEditor().getChildren()[charPosY].textContent.length){
+            charPosX = main.getEditor().getChildren()[charPosY].textContent.length;
         }
         return new Position(charPosX, charPosY);
     }
 
     getMousePosition(e){
-        return new Position((e.clientX - main.getEditor().getFrame().offsetLeft), (e.clientY - main.getEditor().getFrame().offsetTop));
+        return new Position((e.clientX - main.getEditor().getFrameLeft()), (e.clientY - main.getEditor().getFrameTop()));
     }
 
     initListeners(){
@@ -70,16 +75,5 @@ export class Mouse{
         main.getEditor().getFrame().addEventListener("mouseup", (e) => {
             this.clickUp(e)
         });
-    }
-
-    isSelection(){
-        let pos = func.sortInts(this.mousePosUp.x, this.mousePosDown.x);
-        if(pos.large - pos.small < main.getCharAtts().width / 2){
-            pos = func.sortInts(this.mousePosUp.y, this.mousePosDown.y);
-            if(pos.large - pos.small < main.getCharAtts().lineHeight / 2){
-                return false;
-            }
-        }
-        return true;
     }
 }

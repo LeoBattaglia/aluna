@@ -12,7 +12,12 @@ export class Editor{
     addRow(content){
         let line = func.createLine(content);
         main.getFrames().editor.appendChild(line);
+        main.getScroll().resetScrollBars();
         this.resetRowNumbers();
+    }
+
+    getChildren(){
+        return main.getFrames().editor.children;
     }
 
     getEditor(){
@@ -23,12 +28,32 @@ export class Editor{
         return main.getFrames().frmEditor;
     }
 
+    getFrameHeight(){
+        return main.getFrames().frmEditor.offsetHeight;
+    }
+
+    getFrameLeft(){
+        return main.getFrames().frmEditor.offsetLeft;
+    }
+
+    getFrameTop(){
+        return main.getFrames().frmEditor.offsetTop;
+    }
+
+    getFrameWidth(){
+        return main.getFrames().frmEditor.offsetWidth;
+    }
+
     getPositionStartLeft(){
         return main.getFrames().editor.offsetLeft + config.padding;
     }
 
     getPositionStartTop(){
         return main.getFrames().editor.offsetTop + config.padding + 5
+    }
+
+    getRowCount(){
+        return main.getFrames().editor.childElementCount;
     }
 
     removeRowNumbers(){

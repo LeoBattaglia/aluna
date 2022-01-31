@@ -48,6 +48,15 @@ export function createLineNumber(nr){
     return div;
 }
 
+export function createScrollbar(id){
+    let div = createDiv(id);
+    div.style.backgroundColor = config.bgScrollbar;
+    div.style.borderRadius = config.scrollbarSize + "px";
+    //div.style.cursor = "pointer";
+    div.style.position = "relative";
+    return div;
+}
+
 export function createSelection(left, top, height, width){
     let div = document.createElement("div");
     div.setAttribute("class", "alunaSelection");
@@ -66,17 +75,26 @@ export function getCharAtts(){
     let context = canvas.getContext("2d");
     context.font = "normal " + config.fontSize + "px Aluna";
     let {width} = context.measureText("A");
-    let atts = {
+    return {
         height: config.fontSize + 5,
         fontSize: config.fontSize,
         lineHeight: (config.fontSize + 5 + config.lineHeightOffset),
         width: width
     };
-    return atts;
 }
 
 function getCssStyle(element, att) {
     return window.getComputedStyle(element, null).getPropertyValue(att);
+}
+
+export function getLongestRowLength(rows){
+    let max = 0;
+    for(let i = 0; i < rows.length; i++){
+        if(rows[i].textContent.length > max){
+            max = rows[i].textContent.length;
+        }
+    }
+    return max;
 }
 
 export function initCSS(){
@@ -88,6 +106,12 @@ export function initCSS(){
 
 export function initListeners(frames){
     window.addEventListener("resize", () => {frames.resetSizes()});
+}
+
+export function removeElement(id){
+    if(document.getElementById(id) !== null){
+        document.getElementById(id).remove();
+    }
 }
 
 export function setAllHeights(element, height){
