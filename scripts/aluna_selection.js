@@ -47,6 +47,7 @@ export class Selection{
     }
 
     setSelection(posDown, posUp){
+        //this.removeSelection();
         if(posDown.y > main.getEditor().getRowCount() - 1){
             posDown.y = main.getEditor().getRowCount()- 1;
         }
