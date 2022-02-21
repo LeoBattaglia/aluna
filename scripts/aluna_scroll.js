@@ -90,28 +90,26 @@ export class ScrollBars{
                 top = frame.offsetHeight - scrollbar.offsetHeight;
             }
             scrollbar.style.top = top + "px";
-
-            //TODO: Move Editor
-
+            this.scrollVertical(frame, scrollbar, top);
         }
     }
 
     resetScrollBars(){
         this.pos = new Position(0, 0);
+        func.removeElement("alunaScrollbarVertical");
         let heightTotal = config.padding + (main.getCharAtts().lineHeight * main.getEditor().getRowCount());
         if(heightTotal > main.getEditor().getFrameHeight()){
             let percent = ((main.getEditor().getFrameHeight() * 100) / heightTotal) / 100;
-            let height = main.getFrames().frmScrollbarHorizontal.offsetHeight * percent;
+            let height = main.getFrames().frmScrollbarVertical.offsetHeight * percent;
             let scrollBar = func.createScrollbar("alunaScrollbarVertical");
             scrollBar.style.height = height + "px";
-            scrollBar.style.width = main.getFrames().frmScrollbarHorizontal.offsetWidth + "px";
+            scrollBar.style.width = main.getFrames().frmScrollbarVertical.offsetWidth + "px";
             scrollBar.addEventListener("mousedown", (e) => {
                 this.mouseDownScrollbarVertical(e);
             });
             main.getFrames().frmScrollbarVertical.appendChild(scrollBar);
-        }else{
-            func.removeElement("alunaScrollbarVertical");
         }
+        func.removeElement("alunaScrollbarHorizontal");
         let length = func.getLongestRowLength(main.getEditor().getChildren());
         let widthTotal = config.padding + (length * main.getCharAtts().width);
         if(widthTotal > main.getEditor().getFrameWidth()){
@@ -124,8 +122,6 @@ export class ScrollBars{
                 this.mouseDownScrollbarHorizontal(e);
             });
             main.getFrames().frmScrollbarHorizontal.appendChild(scrollBar);
-        }else{
-            func.removeElement("alunaScrollbarHorizontal");
         }
     }
 
@@ -134,5 +130,13 @@ export class ScrollBars{
         let percent = ((left * 100) / widthFull) / 100;
         let offset = (main.getFrames().editor.offsetWidth - main.getFrames().frmEditor.offsetWidth) * percent;
         main.getFrames().editor.style.left = "-" + offset + "px";
+    }
+
+    scrollVertical(frame, scrollBar, top){
+        let heightFull = frame.offsetHeight - scrollBar.offsetHeight;
+        let percent = ((top * 100) / heightFull) / 100;
+        let offset = (main.getFrames().editor.offsetHeight - main.getFrames().frmEditor.offsetHeight) * percent;
+        main.getFrames().editor.style.top = "-" + offset + "px";
+        main.getFrames().rowNumbers.style.top = "-" + offset + "px";
     }
 }

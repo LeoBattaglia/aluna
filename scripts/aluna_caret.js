@@ -6,6 +6,7 @@ import * as main from "../aluna.js";
 //Classes
 export class Caret{
     //Declarations
+    caret;
     caretPos;
 
     //Constructor
@@ -23,8 +24,8 @@ export class Caret{
 
     initCaret(){
         this.caret = document.createElement("textarea");
-        this.caret.setAttribute("id", "aluna_caret");
-        this.caret.setAttribute("class", "aluna_blinker");
+        this.caret.setAttribute("id", "alunaCaret");
+        this.caret.setAttribute("class", "alunaBlinker");
         this.caret.style.background = config.bgCaret;
         this.caret.style.border = "0px none #ffffff";
         this.caret.style.caretColor = "transparent";
@@ -46,10 +47,10 @@ export class Caret{
     }
 
     initCSS(){
-        let css = ".aluna_blinker {animation: aluna_blinker 1s linear infinite;}\n";
-        css += "@keyframes aluna_blinker {25% {opacity: 100;}30% {opacity: 0;}70% {opacity: 0;}75% {opacity: 100;}}\n";
+        let css = ".alunaBlinker {animation: alunaBlinker 1s linear infinite;}\n";
+        css += "@keyframes alunaBlinker {25% {opacity: 100;}30% {opacity: 0;}70% {opacity: 0;}75% {opacity: 100;}}\n";
         css += ".alunaLine::selection{background-color:" + config.bgSelection + ";}\n";
-        document.getElementById("aluna_style").innerHTML += css;
+        document.getElementById("alunaStyle").innerHTML += css;
     }
 
     initListeners(){
@@ -61,11 +62,15 @@ export class Caret{
         });
     }
 
-    moveToPosition(pos, activeRowNr){
+    moveToPosition(pos, rowNr){
+        if(this.caret !== null){
+            this.caret.remove();
+        }
+        main.getFrames().editor.children[rowNr].appendChild(this.caret);
         this.caret.style.left = pos.x + "px";
         this.caret.style.top = pos.y + "px";
         this.caret.focus();
         this.caretPos = pos;
-        main.getEditor().setActiveRow(activeRowNr);
+        main.getEditor().setActiveRow(rowNr);
     }
 }

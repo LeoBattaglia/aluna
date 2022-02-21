@@ -1,6 +1,7 @@
 //Imports
 import * as config from "./aluna_config.js";
 import * as func from "./aluna_functions.js";
+import * as main from "../aluna.js";
 
 //Class
 export class Frames{
@@ -10,11 +11,12 @@ export class Frames{
     frmEditor;
     frmHorizontal;
     frmMain;
-    frmLineNumbers;
+    frmRowNumbers;
     frmScrollbarHorizontal;
     frmScrollbarHorizontalOut;
     frmScrollbarVertical;
     frmVertical;
+    rowNumbers;
     scrollbarSpacer;
     verticalSpacer;
 
@@ -27,7 +29,8 @@ export class Frames{
     //Methods
     init(){
         this.initFrameMain();
-        this.initFrameLineNumbers();
+        this.initFrameRowNumbers();
+        this.initRowNumbers();
         this.initHorizontalSpacer();
         this.initFrameVertical();
         this.initFrameHorizontal();
@@ -69,7 +72,7 @@ export class Frames{
         div.style.minHeight = "100%";
         div.style.overflow = "hidden";
         //div.style.paddingTop = config.padding + "px";
-        div.style.position = "relative";
+        //div.style.position = "relative";
         div.style.width = "100%";
         this.frmEditor = div;
         this.frmHorizontal.appendChild(div);
@@ -85,28 +88,30 @@ export class Frames{
         this.frmVertical.appendChild(div);
     }
 
-    initFrameLineNumbers(){
-        let div = func.createDiv("alunaFrameLineNumbers");
-        div.style.backgroundColor = config.bgLineNumbers;
-        div.style.color = config.fgLineNumbers;
-        div.style.display = "flex";
-        div.style.flexDirection = "column";
-        div.style.paddingTop = config.padding + "px";
-        div.style.userSelect = "none";
-        let line = func.createLineNumber(1);
-        div.appendChild(line);
-        this.frmLineNumbers = div;
-        this.frmMain.appendChild(div);
-    }
-
     initFrameMain(){
         let div = document.getElementById("aluna");
+        div.style.backgroundColor = config.bgLineNumbers;
         div.style.display = "flex";
         div.style.flexDirection = "row";
         div.style.fontFamily = "Aluna";
         div.style.fontSize = config.fontSize + "px";
         div.style.width = "100%";
         this.frmMain = div;
+    }
+
+    initFrameRowNumbers(){
+        let div = func.createDiv("alunaFrameRowNumbers");
+        //div.style.backgroundColor = config.bgLineNumbers;
+        div.style.color = config.fgLineNumbers;
+        div.style.display = "flex";
+        div.style.flexDirection = "column";
+        div.style.overflow = "hidden";
+        //div.style.paddingTop = config.padding + "px";
+        div.style.userSelect = "none";
+        let line = func.createRowNumber(1);
+        div.appendChild(line);
+        this.frmRowNumbers = div;
+        this.frmMain.appendChild(div);
     }
 
     initFrameScrollbarHorizontal(){
@@ -163,11 +168,27 @@ export class Frames{
         this.frmMain.appendChild(div);
     }
 
+    initRowNumbers(){
+        let div = func.createDiv("alunaRowNumbers");
+        //div.style.backgroundColor = config.bgLineNumbers;
+        //div.style.color = config.fgLineNumbers;
+        //div.style.display = "flex";
+        //div.style.flexDirection = "column";
+        //div.style.overflow = "hidden";
+        div.style.paddingTop = config.padding + "px";
+        div.style.position = "relative";
+        //div.style.userSelect = "none";
+        let line = func.createRowNumber(1);
+        div.appendChild(line);
+        this.rowNumbers = div;
+        this.frmRowNumbers.appendChild(div);
+    }
+
     resetData(charAtts){
         this.charAtts = charAtts;
         let width = (2 * config.padding) + (config.lineNumbersChars * this.charAtts.width);
-        this.frmLineNumbers = func.setAllWidths(this.frmLineNumbers, width);
-        this.frmLineNumbers.style.lineHeight = this.charAtts.lineHeight + "px";
+        this.frmRowNumbers = func.setAllWidths(this.frmRowNumbers, width);
+        this.frmRowNumbers.style.lineHeight = this.charAtts.lineHeight + "px";
         this.frmEditor.style.lineHeight = this.charAtts.lineHeight + "px";
         this.resetSizes();
     }
@@ -177,5 +198,10 @@ export class Frames{
         this.frmEditor.style.maxHeight = this.frmHorizontal.offsetHeight + "px";
         this.frmEditor.style.width = (this.frmHorizontal.offsetWidth - config.scrollbarSize) + "px";
         this.frmEditor.style.maxWidth = (this.frmHorizontal.offsetWidth - config.scrollbarSize) + "px";
+        this.frmRowNumbers.style.height = this.frmHorizontal.offsetHeight + "px";
+        this.frmRowNumbers.style.maxHeight = this.frmHorizontal.offsetHeight + "px";
+        if(main.getScroll() !== undefined){
+            main.getScroll().resetScrollBars();
+        }
     }
 }

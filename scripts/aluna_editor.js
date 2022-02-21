@@ -10,7 +10,7 @@ export class Editor{
 
     //Methods
     addRow(content){
-        let line = func.createLine(content);
+        let line = func.createRow(content);
         main.getFrames().editor.appendChild(line);
         main.getScroll().resetScrollBars();
         this.resetRowNumbers();
@@ -57,7 +57,7 @@ export class Editor{
     }
 
     removeRowNumbers(){
-        let elements = document.getElementsByClassName("alunaLineNumber");
+        let elements = document.getElementsByClassName("alunaRowNumber");
         while(elements[0]){
             elements[0].parentNode.removeChild(elements[0]);
         }
@@ -72,15 +72,18 @@ export class Editor{
     resetRowNumbers(){
         this.removeRowNumbers();
         for(let i = 0; i < main.getFrames().editor.childElementCount; i++){
-            main.getFrames().frmLineNumbers.appendChild(func.createLineNumber(i + 1));
+            main.getFrames().rowNumbers.appendChild(func.createRowNumber(i + 1));
         }
     }
 
     setActiveRow(rowNr){
-        //console.log("FFF: " + rowNr)
-        if(document.getElementById("aluna_row_active") !== null){
-            document.getElementById("aluna_row_active").remove();
+        if(document.getElementById("alunaRowActive") !== null){
+            document.getElementById("alunaRowActive").remove();
         }
-        main.getFrames().frmEditor.appendChild(func.createActiveRow(main.getFrames().editor, rowNr, main.getCharAtts()));
+        if(this.getChildren().length < 1){
+            main.getFrames().frmEditor.appendChild(func.createActiveRow(main.getFrames().editor, rowNr, main.getCharAtts(), true));
+        }else{
+            this.getChildren()[rowNr].appendChild(func.createActiveRow(main.getFrames().editor, rowNr, main.getCharAtts(), false));
+        }
     }
 }

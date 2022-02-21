@@ -14,9 +14,10 @@ export class Selection{
     //Methods
     initListeners(){
         document.addEventListener("mousemove", (e) => {
-            let x = e.clientX - main.getEditor().getFrame().offsetLeft;
-            let y = e.clientY - main.getEditor().getFrame().offsetTop - config.padding;
-            //console.log("SSS: " + x + "/" + y)
+            let diff_x = main.getEditor().getFrameLeft() - main.getEditor().getEditor().offsetLeft;
+            let diff_y = main.getEditor().getFrameTop() - main.getEditor().getEditor().offsetTop;
+            let x = e.clientX - main.getEditor().getFrameLeft() + diff_x;
+            let y = e.clientY - main.getEditor().getFrameTop() + diff_y - config.padding;
             let pos = new Position(x, y);
             if(main.getMouse().pressed && this.isSelection(main.getMouse().mousePosDown, pos)){
                 //console.log("FFF: " + main.getMouse().mousePosDown.x + "/" + main.getMouse().mousePosDown.y + " || " + pos.x + "/" + pos.y)
@@ -47,7 +48,7 @@ export class Selection{
     }
 
     setSelection(posDown, posUp){
-        //this.removeSelection();
+        this.removeSelection();
         if(posDown.y > main.getEditor().getRowCount() - 1){
             posDown.y = main.getEditor().getRowCount()- 1;
         }
@@ -56,16 +57,14 @@ export class Selection{
         }
         let positions = func.sortPos(posDown, posUp);
         let left, top, width;
-        //console.log("Selection: " + posDown.x + "/" + posDown.y + " || " + posUp.x + "/" + posUp.y);
         if(posDown.y === posUp.y){
             let line = main.getEditor().getChildren()[posDown.y];
             left = line.offsetLeft + config.padding + (positions.small.x * main.getCharAtts().width);
             top = line.offsetTop + config.lineHeightOffset;
             width = (positions.large.x - positions.small.x) * main.getCharAtts().width;
-            main.getEditor().getFrame().appendChild(func.createSelection(left, top, main.getCharAtts().height - 1, width));
+            line.appendChild(func.createSelection(left, top, main.getCharAtts().height - 1, width));
         }else{
             for(let i = positions.small.y; i <= positions.large.y; i++){
-                //console.log("BBB: " + i + "/" + positions.small.y + "/" + positions.large.y + "/" + posUp.y)
                 let line = main.getEditor().getChildren()[i];
                 if(i === positions.small.y){
                     left = line.offsetLeft + config.padding + (positions.small.x * main.getCharAtts().width);
@@ -80,9 +79,8 @@ export class Selection{
                     top = line.offsetTop + (i * config.lineHeightOffset);
                     width = line.textContent.length * main.getCharAtts().width;
                 }
-                main.getEditor().getFrame().appendChild(func.createSelection(left, top, main.getCharAtts().height - 1, width));
+                line.appendChild(func.createSelection(left, top, main.getCharAtts().height - 1, width));
             }
         }
-        //main.getCaret().moveToPosition(positions.small, positions.small.y);
     }
 }

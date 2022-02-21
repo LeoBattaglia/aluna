@@ -26,7 +26,7 @@ export class Mouse{
     }
 
     clickUp(e){
-        if(e.button === 0){
+        if(e.button === 0 && this.pressed){
             this.mousePosUp = this.getMousePosition(e);
             let pos;
             if(main.getSelection().isSelection(this.mousePosDown, this.mousePosUp)){
@@ -65,7 +65,11 @@ export class Mouse{
     }
 
     getMousePosition(e){
-        return new Position((e.clientX - main.getEditor().getFrameLeft()), (e.clientY - main.getEditor().getFrameTop()));
+        let diff_x = main.getEditor().getFrameLeft() - main.getEditor().getEditor().offsetLeft;
+        let diff_y = main.getEditor().getFrameTop() - main.getEditor().getEditor().offsetTop;
+        let x = e.clientX - main.getEditor().getFrameLeft() + diff_x;
+        let y = e.clientY - main.getEditor().getFrameTop() + diff_y;
+        return new Position(x, y);
     }
 
     initListeners(){

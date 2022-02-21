@@ -2,11 +2,15 @@
 import * as config from "./aluna_config.js";
 
 //Functions
-export function createActiveRow(editor, rowNr, charAtts){
-    let div = createDiv("aluna_row_active");
+export function createActiveRow(editor, rowNr, charAtts, addToMain){
+    let div = createDiv("alunaRowActive");
     div.style.backgroundColor = config.bgRowActive;
     div.style.height = charAtts.lineHeight + "px";
-    div.style.left = editor.offsetLeft + "px";
+    if(addToMain){
+        div.style.left = editor.offsetLeft + "px";
+    }else{
+        div.style.left = "0px";
+    }
     div.style.position = "absolute";
     div.style.top = (config.padding + (rowNr * charAtts.lineHeight)) + "px";
     div.style.maxWidth = editor.offsetWidth + "px";
@@ -16,30 +20,43 @@ export function createActiveRow(editor, rowNr, charAtts){
     return div;
 }
 
+export function createContent(content){
+    let div = document.createElement("div");
+    div.setAttribute("class", "alunaContent");
+    //div.style.paddingLeft = config.padding + "px";
+    //div.style.paddingRight = config.padding + "px";
+    div.style.position = "relative";
+    //div.style.whiteSpace = "pre";
+    div.style.zIndex = "2";
+    div.innerHTML = content;
+    return div;
+}
+
 export function createDiv(id){
     let div = document.createElement("div");
     div.setAttribute("id", id);
     return div;
 }
 
-export function createLine(content){
+export function createRow(content){
     let div = document.createElement("div");
-    div.setAttribute("class", "alunaLine");
+    div.setAttribute("class", "alunaRow");
     //div.style.backgroundColor = config.bgLineActive;
     div.style.paddingLeft = config.padding + "px";
     div.style.paddingRight = config.padding + "px";
     div.style.whiteSpace = "pre";
-    div.style.zIndex = "2";
+    //div.style.zIndex = "2";
     /*if(content === undefined || content === null || content === ""){
         content = " ";
     }*/
-    div.innerHTML = content;
+    //div.innerHTML = "<div>" + content + "</div>";
+    div.appendChild(createContent(content));
     return div;
 }
 
-export function createLineNumber(nr){
+export function createRowNumber(nr){
     let div = document.createElement("div");
-    div.setAttribute("class", "alunaLineNumber");
+    div.setAttribute("class", "alunaRowNumber");
     //div.style.backgroundColor = "pink";
     div.style.marginLeft = config.padding + "px";
     div.style.marginRight = config.padding + "px";
@@ -63,6 +80,7 @@ export function createSelection(left, top, height, width){
     div.style.backgroundColor = config.bgSelection;
     div.style.height = height + "px";
     div.style.left = left + "px";
+    //div.style.position = "relative";
     div.style.position = "absolute";
     div.style.top = top + "px";
     div.style.width = width + "px";
@@ -99,7 +117,7 @@ export function getLongestRowLength(rows){
 
 export function initCSS(){
     let style = document.createElement("style");
-    style.setAttribute("id", "aluna_style");
+    style.setAttribute("id", "alunaStyle");
     style.innerHTML = "@font-face{font-family: \"Aluna\"; src: url(\"SourceCodePro-Regular.ttf\");}\n";
     document.head.appendChild(style);
 }
