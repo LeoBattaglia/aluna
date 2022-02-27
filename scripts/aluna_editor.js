@@ -10,8 +10,8 @@ export class Editor{
 
     //Methods
     addRow(content){
-        let line = func.createRow(content);
-        main.getFrames().editor.appendChild(line);
+        let row = func.createRow(content);
+        main.getFrames().editor.appendChild(row);
         main.getScroll().resetScrollBars();
         this.resetRowNumbers();
     }
@@ -50,6 +50,10 @@ export class Editor{
 
     getPositionStartTop(){
         return main.getFrames().editor.offsetTop + config.padding + 5
+    }
+
+    getRow(index){
+        return this.getChildren()[index];
     }
 
     getRowCount(){

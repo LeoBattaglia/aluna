@@ -30,14 +30,17 @@ export class Mouse{
             this.mousePosUp = this.getMousePosition(e);
             let pos;
             if(main.getSelection().isSelection(this.mousePosDown, this.mousePosUp)){
-                let positions = func.sortPos(this.mousePosDown, this.mousePosUp);
-                pos = this.getCharPosition(positions.small, true, true);
+                //let positions = func.sortPos(this.getCharPosition(this.mousePosDown, true, true), this.getCharPosition(this.mousePosUp, true, true));
+                //pos = positions.small;
             }else{
                 pos = this.getCharPosition(this.mousePosUp, true, true);
+                let left = config.padding + (pos.x * main.getCharAtts().width);
+                let top = config.padding + (pos.y * main.getCharAtts().lineHeight) + 5;
+                main.getCaret().moveToPosition(new Position(left, top), pos.y);
             }
-            let left = config.padding + (pos.x * main.getCharAtts().width);
-            let top = config.padding + (pos.y * main.getCharAtts().lineHeight) + 5;
-            main.getCaret().moveToPosition(new Position(left, top), pos.y);
+            //let left = config.padding + (pos.x * main.getCharAtts().width);
+            //let top = config.padding + (pos.y * main.getCharAtts().lineHeight) + 5;
+            //main.getCaret().moveToPosition(new Position(left, top), pos.y);
             this.pressed = false;
         }
     }

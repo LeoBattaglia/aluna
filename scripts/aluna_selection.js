@@ -12,6 +12,10 @@ export class Selection{
     }
 
     //Methods
+    getTextWidth(row){
+        return config.padding + (row.textContent.length * main.getCharAtts().width);
+    }
+
     initListeners(){
         document.addEventListener("mousemove", (e) => {
             let diff_x = main.getEditor().getFrameLeft() - main.getEditor().getEditor().offsetLeft;
@@ -47,39 +51,70 @@ export class Selection{
         }
     }
 
+    setMaxPosY(pos){
+        if(pos.y > main.getEditor().getRowCount() - 1){
+            pos.y = main.getEditor().getRowCount()- 1;
+        }
+        return pos;
+    }
+
     setSelection(posDown, posUp){
         this.removeSelection();
-        if(posDown.y > main.getEditor().getRowCount() - 1){
-            posDown.y = main.getEditor().getRowCount()- 1;
-        }
-        if(posUp.y > main.getEditor().getRowCount() - 1){
-            posUp.y = main.getEditor().getRowCount()- 1;
-        }
+        posDown = this.setMaxPosY(posDown);
+        posUp = this.setMaxPosY(posUp);
         let positions = func.sortPos(posDown, posUp);
-        let left, top, width;
+        let left, row, textWidth, top, width;
         if(posDown.y === posUp.y){
-            let line = main.getEditor().getChildren()[posDown.y];
-            left = line.offsetLeft + config.padding + (positions.small.x * main.getCharAtts().width);
-            top = line.offsetTop + config.lineHeightOffset;
-            width = (positions.large.x - positions.small.x) * main.getCharAtts().width;
-            line.appendChild(func.createSelection(left, top, main.getCharAtts().height - 1, width));
+            row = main.getEditor().getRow(posDown.y);
+            left = row.offsetLeft + config.padding + (positions.small.x * main.getCharAtts().width);
+            textWidth = this.getTextWidth(row);
+            if(left <= textWidth){
+                top = row.offsetTop + config.lineHeightOffset;
+                width = (positions.large.x - positions.small.x) * main.getCharAtts().width;
+                width + left > textWidth ? width = textWidth - left : undefined;
+                addSelection(row, left, top, width);
+            }
         }else{
             for(let i = positions.small.y; i <= positions.large.y; i++){
-                let line = main.getEditor().getChildren()[i];
+                row = main.getEditor().getRow(i);
+                textWidth = this.getTextWidth(row);
+                top = row.offsetTop + config.lineHeightOffset;
                 if(i === positions.small.y){
-                    left = line.offsetLeft + config.padding + (positions.small.x * main.getCharAtts().width);
-                    top = line.offsetTop + config.lineHeightOffset;
-                    width = (line.textContent.length - positions.small.x) * main.getCharAtts().width;
+                    left = row.offsetLeft + config.padding + (positions.small.x * main.getCharAtts().width);
+                    if(left <= textWidth){
+                        width = (row.textContent.length - positions.small.x) * main.getCharAtts().width;
+                        width + left > textWidth ? width = textWidth - left : undefined;
+                        addSelection(row, left, top, width);
+                    }
                 }else if(i === positions.large.y){
-                    left = line.offsetLeft + config.padding;
-                    top = line.offsetTop + config.lineHeightOffset;
-                    width = positions.large.x * main.getCharAtts().width;
+                    left = row.offsetLeft + config.padding;
+                    if(left <= textWidth){
+                        width = positions.large.x * main.getCharAtts().width;
+                        width + left > textWidth ? width = textWidth - left : undefined;
+                        addSelection(row, left, top, width);
+                    }
                 }else{
-                    left = line.offsetLeft + config.padding;
-                    top = line.offsetTop + (i * config.lineHeightOffset);
-                    width = line.textContent.length * main.getCharAtts().width;
+                    left = row.offsetLeft + config.padding;
+                    if(left <= textWidth){
+                        width = row.textContent.length * main.getCharAtts().width;
+                        width + left > textWidth ? width = textWidth - left : undefined;
+                        addSelection(row, left, top, width);
+                    }
                 }
-                line.appendChild(func.createSelection(left, top, main.getCharAtts().height - 1, width));
+            }
+        }
+        let selections = document.getElementsByClassName("alunaSelection");
+        if(selections.length > 0){
+            left = selections[0].offsetLeft;
+            top = selections[0].offsetTop + 3;
+            let pos = main.getMouse().getCharPosition(new Position(left, top), false, false);
+            main.getCaret().moveToPosition(new Position(left, top), pos.y);
+        }
+
+        //Sub-Functions
+        function addSelection(row, left, top, width){
+            if(width > 0){
+                row.appendChild(func.createSelection(left, top, main.getCharAtts().height - 1, width));
             }
         }
     }

@@ -160,25 +160,60 @@ export function sortInts(val1, val2){
     }
 }
 
+/*export function sortPos(pos1, pos2, charPos1, charPos2){
+    console.log("QQQ1: " + pos1.x + "/" + pos1.y + " || " + charPos1.x + "/" + charPos1.y)
+    console.log("QQQ2: " + pos2.x + "/" + pos2.y + " || " + charPos2.x + "/" + charPos2.y)
+    if(charPos1.y < charPos2.y){
+        return {
+            small: pos1,
+            large: pos2
+        }
+    }else{
+        if(charPos1.y > charPos2.y){
+            return {
+                small: pos2,
+                large: pos1
+            }
+        }else{
+            if(charPos1.x < charPos2.x){
+                return {
+                    small: pos1,
+                    large: pos2
+                }
+            }else{
+                return {
+                    small: pos2,
+                    large: pos1
+                }
+            }
+        }
+    }
+}*/
+
 export function sortPos(pos1, pos2){
+    //console.log("VVV: " + pos1.x + "/" + pos1.y + " || " + pos2.x + "/" + pos2.y)
     if(pos1.y < pos2.y){
+        //console.log("XXX1")
         return {
             small: pos1,
             large: pos2
         }
     }else{
         if(pos1.y > pos2.y){
+            //console.log("XXX2")
             return {
                 small: pos2,
                 large: pos1
             }
         }else{
             if(pos1.x < pos2.x){
+                //console.log("XXX3")
                 return {
                     small: pos1,
                     large: pos2
                 }
             }else{
+                //console.log("XXX4")
                 return {
                     small: pos2,
                     large: pos1
