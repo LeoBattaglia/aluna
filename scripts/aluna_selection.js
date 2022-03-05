@@ -74,6 +74,7 @@ export class Selection{
                 width + left > textWidth ? width = textWidth - left : undefined;
                 addSelection(row, left, top, width);
             }
+            main.getCaret().moveToPosition(new Position(left, top + 3), posUp.y);
         }else{
             for(let i = positions.small.y; i <= positions.large.y; i++){
                 row = main.getEditor().getRow(i);
@@ -86,6 +87,8 @@ export class Selection{
                         width + left > textWidth ? width = textWidth - left : undefined;
                         addSelection(row, left, top, width);
                     }
+                    left > textWidth ? left = textWidth : undefined;
+                    main.getCaret().moveToPosition(new Position(left, top + 3), i);
                 }else if(i === positions.large.y){
                     left = row.offsetLeft + config.padding;
                     if(left <= textWidth){
@@ -102,13 +105,6 @@ export class Selection{
                     }
                 }
             }
-        }
-        let selections = document.getElementsByClassName("alunaSelection");
-        if(selections.length > 0){
-            left = selections[0].offsetLeft;
-            top = selections[0].offsetTop + 3;
-            let pos = main.getMouse().getCharPosition(new Position(left, top), false, false);
-            main.getCaret().moveToPosition(new Position(left, top), pos.y);
         }
 
         //Sub-Functions
