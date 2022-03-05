@@ -14,6 +14,7 @@ export let fgEditor = "#c4d0dd";
 export let fgLineNumbers = "#555555";
 
 //Sizes
+export let caretOffset = 3;
 export let caretWidth = 1;
 export let fontSize = 15;
 export let horizontalSpacerWidth = 2;

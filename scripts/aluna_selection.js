@@ -24,6 +24,7 @@ export class Selection{
             let y = e.clientY - main.getEditor().getFrameTop() + diff_y - config.padding;
             let pos = new Position(x, y);
             if(main.getMouse().pressed && this.isSelection(main.getMouse().mousePosDown, pos)){
+                //main.getCaret().moveToPosition(pos, 0);
                 //console.log("FFF: " + main.getMouse().mousePosDown.x + "/" + main.getMouse().mousePosDown.y + " || " + pos.x + "/" + pos.y)
                 this.setSelection(main.getMouse().getCharPosition(main.getMouse().mousePosDown), main.getMouse().getCharPosition(pos));
             }
@@ -42,6 +43,10 @@ export class Selection{
             }
         }
         return true;
+    }
+
+    moveCaret(left, top, rowNr){
+        main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), rowNr);
     }
 
     removeSelection(){
@@ -74,7 +79,16 @@ export class Selection{
                 width + left > textWidth ? width = textWidth - left : undefined;
                 addSelection(row, left, top, width);
             }
-            main.getCaret().moveToPosition(new Position(left, top + 3), posUp.y);
+            if(left !== undefined && top !== undefined){
+                if(positions.forward){
+                    //left += width;
+                    //main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), posUp.y);
+                    this.moveCaret((left + width), top, posUp.y);
+                }else{
+                    //main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), posUp.y);
+                    this.moveCaret(left, top, posUp.y);
+                }
+            }
         }else{
             for(let i = positions.small.y; i <= positions.large.y; i++){
                 row = main.getEditor().getRow(i);
@@ -87,14 +101,22 @@ export class Selection{
                         width + left > textWidth ? width = textWidth - left : undefined;
                         addSelection(row, left, top, width);
                     }
-                    left > textWidth ? left = textWidth : undefined;
-                    main.getCaret().moveToPosition(new Position(left, top + 3), i);
+                    if(!positions.forward){
+                        left > textWidth ? left = textWidth : undefined;
+                        //main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), i);
+                        this.moveCaret(left, top, i);
+                    }
                 }else if(i === positions.large.y){
                     left = row.offsetLeft + config.padding;
                     if(left <= textWidth){
                         width = positions.large.x * main.getCharAtts().width;
                         width + left > textWidth ? width = textWidth - left : undefined;
                         addSelection(row, left, top, width);
+                    }
+                    if(positions.forward){
+                        left = width + config.padding;
+                        //main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), i);
+                        this.moveCaret(left, top, i);
                     }
                 }else{
                     left = row.offsetLeft + config.padding;

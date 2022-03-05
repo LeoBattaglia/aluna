@@ -196,27 +196,31 @@ export function sortPos(pos1, pos2){
         //console.log("XXX1")
         return {
             small: pos1,
-            large: pos2
+            large: pos2,
+            forward: true
         }
     }else{
         if(pos1.y > pos2.y){
             //console.log("XXX2")
             return {
                 small: pos2,
-                large: pos1
+                large: pos1,
+                forward: false
             }
         }else{
             if(pos1.x < pos2.x){
                 //console.log("XXX3")
                 return {
                     small: pos1,
-                    large: pos2
+                    large: pos2,
+                    forward: true
                 }
             }else{
                 //console.log("XXX4")
                 return {
                     small: pos2,
-                    large: pos1
+                    large: pos1,
+                    forward: false
                 }
             }
         }
