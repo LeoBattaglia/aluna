@@ -29,6 +29,9 @@ export class Selection{
                 this.setSelection(main.getMouse().getCharPosition(main.getMouse().mousePosDown), main.getMouse().getCharPosition(pos));
             }
         });
+        /*document.addEventListener("mouseup", (e) => {
+            console.log("TTT")
+        });*/
     }
 
     isSelection(mousePosDown, mousePosUp){
@@ -43,10 +46,6 @@ export class Selection{
             }
         }
         return true;
-    }
-
-    moveCaret(left, top, rowNr){
-        main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), rowNr);
     }
 
     removeSelection(){
@@ -70,7 +69,7 @@ export class Selection{
         let positions = func.sortPos(posDown, posUp);
         let left, row, textWidth, top, width;
         if(posDown.y === posUp.y){
-            row = main.getEditor().getRow(posDown.y);
+            row = main.getEditor().getRow(posUp.y);
             left = row.offsetLeft + config.padding + (positions.small.x * main.getCharAtts().width);
             textWidth = this.getTextWidth(row);
             if(left <= textWidth){
@@ -81,12 +80,9 @@ export class Selection{
             }
             if(left !== undefined && top !== undefined){
                 if(positions.forward){
-                    //left += width;
-                    //main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), posUp.y);
-                    this.moveCaret((left + width), top, posUp.y);
+                    moveCaret((left + width), top, posUp.y);
                 }else{
-                    //main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), posUp.y);
-                    this.moveCaret(left, top, posUp.y);
+                    moveCaret(left, top, posUp.y);
                 }
             }
         }else{
@@ -103,8 +99,7 @@ export class Selection{
                     }
                     if(!positions.forward){
                         left > textWidth ? left = textWidth : undefined;
-                        //main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), i);
-                        this.moveCaret(left, top, i);
+                        moveCaret(left, top, i);
                     }
                 }else if(i === positions.large.y){
                     left = row.offsetLeft + config.padding;
@@ -115,8 +110,7 @@ export class Selection{
                     }
                     if(positions.forward){
                         left = width + config.padding;
-                        //main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), i);
-                        this.moveCaret(left, top, i);
+                        moveCaret(left, top, i);
                     }
                 }else{
                     left = row.offsetLeft + config.padding;
@@ -134,6 +128,10 @@ export class Selection{
             if(width > 0){
                 row.appendChild(func.createSelection(left, top, main.getCharAtts().height - 1, width));
             }
+        }
+
+        function moveCaret(left, top, rowNr){
+            main.getCaret().moveToPosition(new Position(left, (top + config.caretOffset)), rowNr);
         }
     }
 }

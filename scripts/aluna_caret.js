@@ -63,6 +63,7 @@ export class Caret{
     }
 
     moveToPosition(pos, rowNr){
+        main.getScroll().scrollCaret(pos);
         if(this.caret !== null){
             this.caret.remove();
         }

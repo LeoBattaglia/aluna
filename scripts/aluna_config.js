@@ -21,6 +21,8 @@ export let horizontalSpacerWidth = 2;
 export let lineHeightOffset = 2;
 export let lineNumbersChars = 4;
 export let padding = 5;
+export let scrollOffsetX = 3;
+export let scrollOffsetY = 1;
 export let scrollbarSize = 15;
 
 //Debug

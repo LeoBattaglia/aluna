@@ -108,6 +108,7 @@ function getCssStyle(element, att) {
 export function getLongestRowLength(rows){
     let max = 0;
     for(let i = 0; i < rows.length; i++){
+        //console.log("VVV: " + rows[i].textContent + " :: " + rows[i].textContent.length);
         if(rows[i].textContent.length > max){
             max = rows[i].textContent.length;
         }

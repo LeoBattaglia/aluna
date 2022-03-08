@@ -21,6 +21,10 @@ export class Mouse{
         if(e.button === 0){
             this.mousePosDown = this.getMousePosition(e);
             main.getSelection().removeSelection();
+            let pos = this.getCharPosition(this.mousePosDown, true, true);
+            let left = config.padding + (pos.x * main.getCharAtts().width);
+            let top = config.padding + (pos.y * main.getCharAtts().lineHeight) + 5;
+            main.getCaret().moveToPosition(new Position(left, top), pos.y);
             this.pressed = true;
         }
     }
@@ -28,19 +32,13 @@ export class Mouse{
     clickUp(e){
         if(e.button === 0 && this.pressed){
             this.mousePosUp = this.getMousePosition(e);
-            let pos;
-            if(main.getSelection().isSelection(this.mousePosDown, this.mousePosUp)){
-                //let positions = func.sortPos(this.getCharPosition(this.mousePosDown, true, true), this.getCharPosition(this.mousePosUp, true, true));
-                //pos = positions.small;
-            }else{
-                pos = this.getCharPosition(this.mousePosUp, true, true);
+            /*if(!main.getSelection().isSelection(this.mousePosDown, this.mousePosUp)){
+                let pos = this.getCharPosition(this.mousePosUp, true, true);
                 let left = config.padding + (pos.x * main.getCharAtts().width);
                 let top = config.padding + (pos.y * main.getCharAtts().lineHeight) + 5;
                 main.getCaret().moveToPosition(new Position(left, top), pos.y);
-            }
-            //let left = config.padding + (pos.x * main.getCharAtts().width);
-            //let top = config.padding + (pos.y * main.getCharAtts().lineHeight) + 5;
-            //main.getCaret().moveToPosition(new Position(left, top), pos.y);
+                //main.getScroll().scrollCaret(this.mousePosUp);
+            }*/
             this.pressed = false;
         }
     }
@@ -79,8 +77,14 @@ export class Mouse{
         main.getEditor().getFrame().addEventListener("mousedown", (e) => {
             this.clickDown(e)
         });
+        /*main.getEditor().getFrame().addEventListener("mouseleave", (e) => {
+            this.clickUp(e)
+        });*/
         main.getEditor().getFrame().addEventListener("mouseup", (e) => {
             this.clickUp(e)
         });
+        /*document.addEventListener("mouseup", (e) => {
+            this.clickUp(e)
+        });*/
     }
 }

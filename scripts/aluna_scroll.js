@@ -7,7 +7,6 @@ import * as main from "../aluna.js";
 //Class
 export class ScrollBars{
     //Declarations
-    //mousePos;
     offset;
     pos;
     selectedHorizontal = false;
@@ -32,7 +31,6 @@ export class ScrollBars{
     }
 
     mouseDownScrollbarHorizontal(e){
-        //this.mousePos = new Position(e.clientX, e.clientY);
         this.offset = e.clientX - document.getElementById("alunaScrollbarHorizontal").offsetLeft;
         this.selectedHorizontal = true;
     }
@@ -43,22 +41,22 @@ export class ScrollBars{
     }
 
     mouseUpHorizontal(e){
-        if(document.getElementById("alunaScrollbarHorizontal") !== null && this.selectedHorizontal){
+        /*if(document.getElementById("alunaScrollbarHorizontal") !== null && this.selectedHorizontal){
             console.log("mouseUpHorizontal: " + e);
 
             //TODO: All
 
-        }
+        }*/
         this.selectedHorizontal = false;
     }
 
     mouseUpVertical(e){
-        if(document.getElementById("alunaScrollbarVertical") !== null && this.selectedVertical){
+        /*if(document.getElementById("alunaScrollbarVertical") !== null && this.selectedVertical){
             console.log("mouseUpVertical: " + e);
 
             //TODO: All
 
-        }
+        }*/
         this.selectedVertical = false;
     }
 
@@ -122,6 +120,44 @@ export class ScrollBars{
                 this.mouseDownScrollbarHorizontal(e);
             });
             main.getFrames().frmScrollbarHorizontal.appendChild(scrollBar);
+        }
+    }
+
+    scrollCaret(pos){
+        let diff = main.getEditor().getFrameLeft() - main.getEditor().getEditor().offsetLeft;
+        let frameMax = main.getEditor().getFrameWidth() - (main.getCharAtts().width * config.scrollOffsetX);
+        if(pos.x - diff > frameMax){
+            let frame = main.getFrames().frmScrollbarHorizontal;
+            let scrollbar = document.getElementById("alunaScrollbarHorizontal");
+            let lengthMax = main.getEditor().getEditor().offsetWidth;
+            let lengthScrollArea = frame.offsetWidth - scrollbar.offsetWidth;
+            let percent = (lengthScrollArea * 100) / lengthMax;
+            let divisor = 100 / percent;
+            let overflow = config.scrollOffsetX * main.getCharAtts().width;
+            let value = overflow / divisor;
+            let left = scrollbar.offsetLeft - frame.offsetLeft + value;
+            if(left < 0){
+                left = 0;
+            }
+            if(left > frame.offsetWidth - scrollbar.offsetWidth){
+                left = frame.offsetWidth - scrollbar.offsetWidth;
+            }
+            scrollbar.style.left = left + "px";
+            this.scrollHorizontal(frame, scrollbar, left);
+
+            //TODO: All
+
+        }else if(pos.x - diff < main.getCharAtts().width * config.scrollOffsetX){
+            console.log("X: " + (pos.x - diff));
+
+        }
+        diff = main.getEditor().getFrameTop() - main.getEditor().getEditor().offsetTop;
+        frameMax = main.getEditor().getFrameHeight() - (main.getCharAtts().lineHeight * config.scrollOffsetY);
+        if(pos.y - diff > frameMax){
+            console.log("scrollCaretY: " + pos.y);
+
+            //TODO: All
+
         }
     }
 
