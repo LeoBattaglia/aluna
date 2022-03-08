@@ -77,9 +77,9 @@ export class Mouse{
         main.getEditor().getFrame().addEventListener("mousedown", (e) => {
             this.clickDown(e)
         });
-        /*main.getEditor().getFrame().addEventListener("mouseleave", (e) => {
+        main.getEditor().getFrame().addEventListener("mouseleave", (e) => {
             this.clickUp(e)
-        });*/
+        });
         main.getEditor().getFrame().addEventListener("mouseup", (e) => {
             this.clickUp(e)
         });
