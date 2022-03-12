@@ -10,7 +10,7 @@ export class Editor{
 
     //Methods
     addRow(content){
-        let row = func.createRow(content);
+        let row = func.createRow(content, main.getCharAtts().lineHeight);
         main.getFrames().editor.appendChild(row);
         main.getScroll().resetScrollBars();
         this.resetRowNumbers();

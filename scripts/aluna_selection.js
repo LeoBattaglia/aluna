@@ -24,14 +24,9 @@ export class Selection{
             let y = e.clientY - main.getEditor().getFrameTop() + diff_y - config.padding;
             let pos = new Position(x, y);
             if(main.getMouse().pressed && this.isSelection(main.getMouse().mousePosDown, pos)){
-                //main.getCaret().moveToPosition(pos, 0);
-                //console.log("FFF: " + main.getMouse().mousePosDown.x + "/" + main.getMouse().mousePosDown.y + " || " + pos.x + "/" + pos.y)
                 this.setSelection(main.getMouse().getCharPosition(main.getMouse().mousePosDown), main.getMouse().getCharPosition(pos));
             }
         });
-        /*document.addEventListener("mouseup", (e) => {
-            console.log("TTT")
-        });*/
     }
 
     isSelection(mousePosDown, mousePosUp){

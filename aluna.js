@@ -38,6 +38,7 @@ class Editor{
         this.selection = new selectionObject.Selection();
         this.mouse = new mouseObject.Mouse();
         this.scroll = new scrollObject.ScrollBars();
+        this.editor.addRow("");
 
         this.editor.addRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         this.editor.addRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVWXYZ");

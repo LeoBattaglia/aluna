@@ -1,5 +1,5 @@
 //Imports
-import {Position} from "./aluna_classes.js";
+//import {Position} from "./aluna_classes.js";
 import * as config from "./aluna_config.js";
 import * as func from "./aluna_functions.js";
 import * as main from "../aluna.js";
@@ -8,17 +8,33 @@ import * as main from "../aluna.js";
 export class ScrollBars{
     //Declarations
     offset;
-    pos;
+    //pos;
     selectedHorizontal = false;
     selectedVertical = false;
 
     //Constructor
     constructor(){
-        this.pos = new Position(0, 0);
+        //this.pos = new Position(0, 0);
         this.initListeners();
     }
 
     //Methods
+    getFrameHorizontal(){
+        return main.getFrames().frmScrollbarHorizontal;
+    }
+
+    getFrameVertical(){
+        return main.getFrames().frmScrollbarVertical;
+    }
+
+    getScrollbarHorizontal(){
+        return document.getElementById("alunaScrollbarHorizontal");
+    }
+
+    getScrollbarVertical(){
+        return document.getElementById("alunaScrollbarVertical");
+    }
+
     initListeners(){
         document.addEventListener("mousemove", (e) => {
             this.moveHorizontal(e);
@@ -28,49 +44,74 @@ export class ScrollBars{
             this.mouseUpHorizontal(e);
             this.mouseUpVertical(e);
         });
+        this.getFrameHorizontal().addEventListener("mousedown", (e) => {
+            this.jumpHorizontal(e);
+        });
+        this.getFrameVertical().addEventListener("mousedown", (e) => {
+            this.jumpVertical(e);
+        });
+    }
+
+    jumpHorizontal(e){
+        let scrollbar = this.getScrollbarHorizontal();
+        //console.log("FFF: " + e.clientX + "/" + scrollbar.offsetLeft + "/" + (scrollbar.offsetLeft + scrollbar.offsetWidth));
+        if(scrollbar !== null){
+            if(e.clientX < scrollbar.offsetLeft || e.clientX > (scrollbar.offsetLeft + scrollbar.offsetWidth)){
+                console.log("Jump H");
+
+                //TODO: All
+
+            }
+        }
+    }
+
+    jumpVertical(e){
+        let scrollbar = this.getScrollbarVertical();
+        //console.log("FFF: " + e.clientY + "/" + scrollbar.offsetTop + "/" + (scrollbar.offsetTop + scrollbar.offsetHeight));
+        if(scrollbar !== null){
+            if(e.clientY < scrollbar.offsetTop || e.clientY > (scrollbar.offsetTop + scrollbar.offsetHeight)){
+                console.log("Jump V");
+
+                //TODO: All
+
+            }
+        }
     }
 
     mouseDownScrollbarHorizontal(e){
-        this.offset = e.clientX - document.getElementById("alunaScrollbarHorizontal").offsetLeft;
+        this.offset = e.clientX - this.getScrollbarHorizontal().offsetLeft;
         this.selectedHorizontal = true;
     }
 
     mouseDownScrollbarVertical(e){
-        this.offset = e.clientY - document.getElementById("alunaScrollbarVertical").offsetTop;
+        this.offset = e.clientY - this.getScrollbarVertical().offsetTop;
         this.selectedVertical = true;
     }
 
     mouseUpHorizontal(e){
         /*if(document.getElementById("alunaScrollbarHorizontal") !== null && this.selectedHorizontal){
-            console.log("mouseUpHorizontal: " + e);
-
-            //TODO: All
-
+            console.log("mouseUpHorizontal1: " + e);
+        }else{
+            console.log("mouseUpHorizontal2: " + e);
         }*/
         this.selectedHorizontal = false;
     }
 
     mouseUpVertical(e){
         /*if(document.getElementById("alunaScrollbarVertical") !== null && this.selectedVertical){
-            console.log("mouseUpVertical: " + e);
-
-            //TODO: All
-
+            console.log("mouseUpVertical1: " + e);
+        }else{
+            console.log("mouseUpVertical2: " + e);
         }*/
         this.selectedVertical = false;
     }
 
     moveHorizontal(e){
         if(this.selectedHorizontal){
-            let frame = main.getFrames().frmScrollbarHorizontal;
-            let scrollbar = document.getElementById("alunaScrollbarHorizontal");
+            let frame = this.getFrameHorizontal();
+            let scrollbar = this.getScrollbarHorizontal();
             let left = e.clientX - frame.offsetLeft - this.offset;
-            if(left < 0){
-                left = 0;
-            }
-            if(left > frame.offsetWidth - scrollbar.offsetWidth){
-                left = frame.offsetWidth - scrollbar.offsetWidth;
-            }
+            left = func.maxMinNumber(left, 0, frame.offsetWidth - scrollbar.offsetWidth);
             scrollbar.style.left = left + "px";
             this.scrollHorizontal(frame, scrollbar, left);
         }
@@ -78,44 +119,40 @@ export class ScrollBars{
 
     moveVertical(e){
         if(this.selectedVertical){
-            let frame = main.getFrames().frmScrollbarVertical;
-            let scrollbar = document.getElementById("alunaScrollbarVertical");
+            let frame = this.getFrameVertical();
+            let scrollbar = this.getScrollbarVertical();
             let top = e.clientY - frame.offsetTop - this.offset;
-            if(top < 0){
-                top = 0;
-            }
-            if(top > frame.offsetHeight - scrollbar.offsetHeight){
-                top = frame.offsetHeight - scrollbar.offsetHeight;
-            }
+            top = func.maxMinNumber(top, 0, frame.offsetHeight - scrollbar.offsetHeight);
             scrollbar.style.top = top + "px";
             this.scrollVertical(frame, scrollbar, top);
         }
     }
 
     resetScrollBars(){
-        this.pos = new Position(0, 0);
+
+        //TODO: Set Editor-Position to 0,0 or save and set Scroll-Position
+
+        //this.pos = new Position(0, 0);
         func.removeElement("alunaScrollbarVertical");
         let heightTotal = config.padding + (main.getCharAtts().lineHeight * main.getEditor().getRowCount());
+        //let heightTotal = main.getEditor().getEditor().offsetHeight;
         if(heightTotal > main.getEditor().getFrameHeight()){
             let percent = ((main.getEditor().getFrameHeight() * 100) / heightTotal) / 100;
-            let height = main.getFrames().frmScrollbarVertical.offsetHeight * percent;
+            let height = this.getFrameVertical().offsetHeight * percent;
             let scrollBar = func.createScrollbar("alunaScrollbarVertical");
-            scrollBar.style.height = height + "px";
-            scrollBar.style.width = main.getFrames().frmScrollbarVertical.offsetWidth + "px";
+            scrollBar = func.setSizes(scrollBar, height, this.getFrameVertical().offsetWidth);
             scrollBar.addEventListener("mousedown", (e) => {
                 this.mouseDownScrollbarVertical(e);
             });
             main.getFrames().frmScrollbarVertical.appendChild(scrollBar);
         }
         func.removeElement("alunaScrollbarHorizontal");
-        let length = func.getLongestRowLength(main.getEditor().getChildren());
-        let widthTotal = config.padding + (length * main.getCharAtts().width);
+        let widthTotal = main.getEditor().getEditor().offsetWidth;
         if(widthTotal > main.getEditor().getFrameWidth()){
             let percent = ((main.getEditor().getFrameWidth() * 100) / widthTotal) / 100;
-            let width = main.getFrames().frmScrollbarHorizontal.offsetWidth * percent;
+            let width = this.getFrameHorizontal().offsetWidth * percent;
             let scrollBar = func.createScrollbar("alunaScrollbarHorizontal");
-            scrollBar.style.height = main.getFrames().frmScrollbarHorizontal.offsetHeight + "px";
-            scrollBar.style.width = width + "px";
+            scrollBar = func.setSizes(scrollBar, this.getFrameHorizontal().offsetHeight, width);
             scrollBar.addEventListener("mousedown", (e) => {
                 this.mouseDownScrollbarHorizontal(e);
             });
@@ -124,41 +161,38 @@ export class ScrollBars{
     }
 
     scrollCaret(pos){
-        let diff = main.getEditor().getFrameLeft() - main.getEditor().getEditor().offsetLeft;
-        let frameMax = main.getEditor().getFrameWidth() - (main.getCharAtts().width * config.scrollOffsetX);
-        if(pos.x - diff > frameMax){
-            let frame = main.getFrames().frmScrollbarHorizontal;
-            let scrollbar = document.getElementById("alunaScrollbarHorizontal");
-            let lengthMax = main.getEditor().getEditor().offsetWidth;
-            let lengthScrollArea = frame.offsetWidth - scrollbar.offsetWidth;
-            let percent = (lengthScrollArea * 100) / lengthMax;
+        if(this.getScrollbarHorizontal() !== null){
+            let diff = main.getEditor().getFrameLeft() - main.getEditor().getEditor().offsetLeft;
+            let frameMax = main.getEditor().getFrameWidth() - (main.getCharAtts().width * config.scrollOffsetX);
+            let frame = this.getFrameHorizontal();
+            let scrollbar = this.getScrollbarHorizontal();
+            let widthTotal = main.getEditor().getEditor().offsetWidth;
+            let widthScrollArea = frame.offsetWidth - scrollbar.offsetWidth;
+            let percent = (widthScrollArea * 100) / widthTotal;
             let divisor = 100 / percent;
             let overflow = config.scrollOffsetX * main.getCharAtts().width;
             let value = overflow / divisor;
-            let left = scrollbar.offsetLeft - frame.offsetLeft + value;
-            if(left < 0){
-                left = 0;
+            let left;
+            if(pos.x - diff > frameMax){
+                left = scrollbar.offsetLeft - frame.offsetLeft + value;
+                left = func.maxMinNumber(left, 0, frame.offsetWidth - scrollbar.offsetWidth);
+                scrollbar.style.left = left + "px";
+                this.scrollHorizontal(frame, scrollbar, left);
+            }else if(pos.x - diff < main.getCharAtts().width * config.scrollOffsetX){
+                left = scrollbar.offsetLeft - frame.offsetLeft - value;
+                left = func.maxMinNumber(left, 0, frame.offsetWidth - scrollbar.offsetWidth);
+                scrollbar.style.left = left + "px";
+                this.scrollHorizontal(frame, scrollbar, left);
             }
-            if(left > frame.offsetWidth - scrollbar.offsetWidth){
-                left = frame.offsetWidth - scrollbar.offsetWidth;
-            }
-            scrollbar.style.left = left + "px";
-            this.scrollHorizontal(frame, scrollbar, left);
-
-            //TODO: All
-
-        }else if(pos.x - diff < main.getCharAtts().width * config.scrollOffsetX){
-            console.log("X: " + (pos.x - diff));
-
         }
-        diff = main.getEditor().getFrameTop() - main.getEditor().getEditor().offsetTop;
+        /*diff = main.getEditor().getFrameTop() - main.getEditor().getEditor().offsetTop;
         frameMax = main.getEditor().getFrameHeight() - (main.getCharAtts().lineHeight * config.scrollOffsetY);
         if(pos.y - diff > frameMax){
             console.log("scrollCaretY: " + pos.y);
 
             //TODO: All
 
-        }
+        }*/
     }
 
     scrollHorizontal(frame, scrollBar, left){

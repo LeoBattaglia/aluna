@@ -108,8 +108,8 @@ export class Frames{
         div.style.overflow = "hidden";
         //div.style.paddingTop = config.padding + "px";
         div.style.userSelect = "none";
-        let line = func.createRowNumber(1);
-        div.appendChild(line);
+        //let line = func.createRowNumber(1);
+        //div.appendChild(line);
         this.frmRowNumbers = div;
         this.frmMain.appendChild(div);
     }

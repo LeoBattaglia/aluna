@@ -21,9 +21,11 @@ export class Mouse{
         if(e.button === 0){
             this.mousePosDown = this.getMousePosition(e);
             main.getSelection().removeSelection();
+            //console.log("CCC: " + this.mousePosDown.x + "/" + this.mousePosDown.y)
             let pos = this.getCharPosition(this.mousePosDown, true, true);
             let left = config.padding + (pos.x * main.getCharAtts().width);
             let top = config.padding + (pos.y * main.getCharAtts().lineHeight) + 5;
+            //console.log("FFF: " + pos.x + "/" + pos.y + "/" + left + "/" + top)
             main.getCaret().moveToPosition(new Position(left, top), pos.y);
             this.pressed = true;
         }
@@ -32,6 +34,9 @@ export class Mouse{
     clickUp(e){
         if(e.button === 0 && this.pressed){
             this.mousePosUp = this.getMousePosition(e);
+            if(!main.getSelection().isSelection(this.mousePosDown, this.mousePosUp)){
+                main.getCaret().focus();
+            }
             /*if(!main.getSelection().isSelection(this.mousePosDown, this.mousePosUp)){
                 let pos = this.getCharPosition(this.mousePosUp, true, true);
                 let left = config.padding + (pos.x * main.getCharAtts().width);

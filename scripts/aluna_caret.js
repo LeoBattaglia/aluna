@@ -15,6 +15,10 @@ export class Caret{
     }
 
     //Methods
+    focus(){
+        this.caret.focus();
+    }
+
     init(){
         this.caretPos = new Position(0, 0);
         this.initCSS();
@@ -41,9 +45,9 @@ export class Caret{
         this.caret.style.top = main.getEditor().getPositionStartTop() + "px";
         this.caret.style.width = config.caretWidth + "px";
         this.caret.style.zIndex = "3";
-        main.getEditor().getFrame().appendChild(this.caret);
-        this.caret.focus();
-        main.getEditor().setActiveRow(0);
+        //main.getEditor().getFrame().appendChild(this.caret);
+        //this.focus();
+        //main.getEditor().setActiveRow(0);
     }
 
     initCSS(){
@@ -70,7 +74,7 @@ export class Caret{
         main.getFrames().editor.children[rowNr].appendChild(this.caret);
         this.caret.style.left = pos.x + "px";
         this.caret.style.top = pos.y + "px";
-        this.caret.focus();
+        this.focus();
         this.caretPos = pos;
         main.getEditor().setActiveRow(rowNr);
     }
